@@ -1,0 +1,21 @@
+{
+    "manifest_version": 3,
+    "name": "Dynamic Subreddit Blocker",
+    "version": "1.0",
+    "permissions": [
+      "storage",
+      "activeTab",
+      "declarativeNetRequest"
+    ],
+    "background": {
+      "service_worker": "background.js"
+    },
+    "content_scripts": [
+      {
+        "matches": ["*://www.reddit.com/*"],
+        "js": ["content.js"]
+      }
+    ],
+    "options_page": "options.html"
+  }
+  
