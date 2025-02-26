@@ -1,21 +1,22 @@
 {
-    "manifest_version": 3,
-    "name": "Dynamic Subreddit Blocker",
-    "version": "1.0",
-    "permissions": [
-      "storage",
-      "activeTab",
-      "declarativeNetRequest"
-    ],
-    "background": {
-      "service_worker": "background.js"
-    },
-    "content_scripts": [
-      {
-        "matches": ["*://www.reddit.com/*"],
-        "js": ["content.js"]
-      }
-    ],
-    "options_page": "options.html"
-  }
-  
+  "manifest_version": 3,
+  "name": "Reddit Blocker",
+  "version": "1.0",
+  "background": {
+    "service_worker": "background.js"
+  },
+  "permissions": [
+    "storage",
+    "debugger"
+  ],
+  "host_permissions": [
+    "https://www.reddit.com/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["https://www.reddit.com/r/*"],
+      "js": ["content.js"],
+      "run_at": "document_end"
+    }
+  ]
+}
