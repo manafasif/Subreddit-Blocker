@@ -2,26 +2,32 @@
   "manifest_version": 3,
   "name": "Reddit Blocker",
   "version": "1.0",
+  "permissions": [
+    "activeTab",
+    "webNavigation",
+    "storage",
+    "tabs",
+    "scripting"
+  ],
   "background": {
     "service_worker": "background.js"
   },
-  "permissions": [
-    "storage",
-    "tabs",
-    "webNavigation",
-    "activeTab",
-    "scripting"
-  ],
-  "host_permissions": [
-    "https://www.reddit.com/*"
-  ],
   "content_scripts": [
     {
-      "matches": ["https://www.reddit.com/r/*"],
+      "matches": ["*://www.reddit.com/r/*"],
       "js": ["content.js"]
     }
   ],
+  "host_permissions": [
+    "http://*/*",
+    "https://*/*"
+  ],
   "action": {
-    "default_popup": "popup.html"
+    "default_popup": "popup.html",
+    "default_icon": {
+      "32": "images/icon32.png",
+      "48": "images/icon48.png",
+      "128": "images/icon128.png"
+    }
   }
 }

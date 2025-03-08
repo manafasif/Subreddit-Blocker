@@ -1,18 +1,3 @@
-// Listen for messages from the background script to trigger the subreddit check
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  if (message.action === "checkSubreddit") {
-    try {
-      blockSubreddit(); // Trigger the blocking function when the message is received
-      sendResponse({ success: true }); // Ensure to send a response back to the background
-    } catch (error) {
-      console.error("Error during subreddit blocking:", error);
-      sendResponse({ success: false, error: error.message });
-    }
-  }
-  // Keep the message port open to receive response asynchronously
-  return true;
-});
-
 // Function to extract subreddit name and block the page if necessary
 function blockSubreddit() {
   const url = new URL(window.location.href);
@@ -25,27 +10,19 @@ function blockSubreddit() {
 
   console.log(`Checking subreddit: ${subreddit}`);
 
-  // Get the list of blocked subreddits from storage
-  chrome.storage.local.get("blockedSubreddits", (data) => {
-    // Log the blocked subreddits for debugging
+  // Get the list of user-blocked subreddits from storage
+  chrome.storage.local.get("userBlockedSubreddits", (data) => {
+    const userBlockedSubreddits = data.userBlockedSubreddits || [];
+
+    // Log the user-blocked subreddits for debugging
     console.log(
-      "Blocked subreddits loaded from storage:",
-      data.blockedSubreddits
-    );
-
-    if (!data.blockedSubreddits) {
-      console.log("No blocked subreddits found in storage.");
-      return; // Exit if no blocked subreddits are found
-    }
-
-    // Store the blocked subreddits in a Set for fast lookup and convert them to lowercase once
-    const blockedSubredditsSet = new Set(
-      data.blockedSubreddits.map((sub) => sub.toLowerCase())
+      "User blocked subreddits loaded from storage:",
+      userBlockedSubreddits
     );
 
     // Check if the current subreddit is blocked
-    if (blockedSubredditsSet.has(subreddit)) {
-      // If the subreddit is in the blocked list, replace the page content
+    if (userBlockedSubreddits.includes(subreddit)) {
+      // If the subreddit is in the user-blocked list, replace the page content
       console.log(
         `Subreddit "${subreddit}" is blocked. Replacing page content.`
       );
