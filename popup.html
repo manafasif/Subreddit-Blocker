@@ -3,48 +3,106 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Block Subreddits</title>
+  <title>Reddit Blocker</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      padding: 10px;
-      width: 250px;
+      font-family: 'Arial', sans-serif;
+      background-color: #f4f7fc;
+      margin: 0;
+      padding: 20px;
+      max-width: 380px;  /* Increased width */
+      box-sizing: border-box;
+    }
+    h3 {
+      text-align: center;
+      color: #333;
+      font-size: 1.2rem;  /* Smaller font size */
+      margin-bottom: 20px;
+    }
+    .input-container {
+      margin-bottom: 20px;
     }
     input {
       width: 100%;
-      padding: 5px;
-      margin-bottom: 10px;
+      padding: 8px;  /* Slightly smaller padding */
+      font-size: 0.9rem;  /* Smaller font size */
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      box-sizing: border-box;
+      background-color: #fff;
+      transition: border-color 0.3s;
+    }
+    input:focus {
+      border-color: #007bff;
+      outline: none;
     }
     button {
       width: 100%;
-      padding: 5px;
+      padding: 10px;  /* Slightly smaller padding */
+      font-size: 0.9rem;  /* Smaller font size */
       background-color: #007bff;
-      color: white;
+      color: #fff;
       border: none;
+      border-radius: 5px;
       cursor: pointer;
+      transition: background-color 0.3s;
     }
     button:hover {
       background-color: #0056b3;
     }
+    h4 {
+      color: #444;
+      font-size: 1rem;  /* Smaller font size */
+      margin-top: 20px;
+      margin-bottom: 10px;
+    }
     ul {
       list-style: none;
       padding: 0;
+      margin: 0;
+      max-height: 150px;
+      overflow-y: auto;
     }
     li {
-      padding: 5px;
-      background-color: #f0f0f0;
-      margin-bottom: 5px;
+      background-color: #f9f9f9;
+      padding: 8px;  /* Slightly smaller padding */
+      margin: 5px 0;
+      border-radius: 5px;
+      font-size: 0.9rem;  /* Smaller font size */
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      color: #333;
+    }
+    .subreddit-block-btn {
+      display: none; /* Initially hidden */
+      margin-top: 20px;
+    }
+    .subreddit-block-btn button {
+      background-color: #e74c3c;
+      font-size: 0.9rem;  /* Smaller font size */
+    }
+    .subreddit-block-btn button:hover {
+      background-color: #c0392b;
     }
   </style>
 </head>
 <body>
-  <h3>Block Subreddits</h3>
-  <input type="text" id="subreddit-input" placeholder="Enter subreddit to block">
+
+  <h3>Reddit Blocker</h3>
+
+  <div class="input-container">
+    <input type="text" id="subreddit-input" placeholder="Enter subreddit to block">
+  </div>
   <button id="add-btn">Add to Blocklist</button>
+
   <h4>Blocked Subreddits:</h4>
   <ul id="blocked-list">
     <!-- Blocked subreddits will be listed here -->
   </ul>
+
+  <div id="subreddit-block-section" class="subreddit-block-btn">
+    <h4>Block Current Subreddit:</h4>
+    <button id="block-current-btn">Block Current Subreddit</button>
+  </div>
 
   <script src="popup.js"></script>
 </body>

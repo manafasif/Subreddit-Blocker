@@ -69,6 +69,39 @@ function blockSubreddit() {
         paragraph.innerHTML = `The subreddit <strong>${subreddit}</strong> has been blocked.`;
         blockedMessage.appendChild(paragraph);
 
+        // Create the "Return to Home" button with Reddit's design
+        const returnButton = document.createElement("button");
+        returnButton.innerText = "Return to Home";
+        returnButton.style.padding = "12px 25px";
+        returnButton.style.backgroundColor = "#FF4500"; // Reddit orange
+        returnButton.style.color = "#fff";
+        returnButton.style.border = "none";
+        returnButton.style.borderRadius = "3px"; // Native Reddit button border radius
+        returnButton.style.fontSize = "1rem";
+        returnButton.style.cursor = "pointer";
+        returnButton.style.transition = "background-color 0.3s, transform 0.3s";
+        returnButton.style.marginTop = "20px";
+        returnButton.style.boxShadow = "0 2px 4px rgba(0, 0, 0, 0.2)";
+
+        // Button hover effect
+        returnButton.addEventListener("mouseenter", () => {
+          returnButton.style.backgroundColor = "#e03e00"; // Darker orange
+          returnButton.style.transform = "scale(1.05)";
+        });
+        returnButton.addEventListener("mouseleave", () => {
+          returnButton.style.backgroundColor = "#FF4500"; // Original Reddit orange
+          returnButton.style.transform = "scale(1)";
+        });
+
+        // Add functionality to the button
+        returnButton.addEventListener("click", () => {
+          window.location.href = "https://www.reddit.com/"; // Redirect to the homepage
+        });
+
+        // Append the button to the message
+        blockedMessage.appendChild(returnButton);
+
+        // Append the message to the body
         document.body.appendChild(blockedMessage);
       } else {
         console.log(`Subreddit "${subreddit}" is not blocked.`);

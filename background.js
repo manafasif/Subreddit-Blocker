@@ -2,7 +2,7 @@ let blockedSubreddits = []; // Stores the list of subreddits to block
 
 // Load subreddit names from the file once
 function loadSubredditNames() {
-  fetch(chrome.runtime.getURL("subreddit_names.txt"))
+  fetch(chrome.runtime.getURL("data/blocked_subreddit_names.txt"))
     .then((response) => response.text())
     .then((data) => {
       // Split the names by newlines or commas, assuming each subreddit is on a new line
