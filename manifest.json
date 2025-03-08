@@ -7,7 +7,10 @@
   },
   "permissions": [
     "storage",
-    "debugger"
+    "tabs",
+    "webNavigation",
+    "activeTab",
+    "scripting"
   ],
   "host_permissions": [
     "https://www.reddit.com/*"
@@ -15,8 +18,10 @@
   "content_scripts": [
     {
       "matches": ["https://www.reddit.com/r/*"],
-      "js": ["content.js"],
-      "run_at": "document_end"
+      "js": ["content.js"]
     }
-  ]
+  ],
+  "action": {
+    "default_popup": "popup.html"
+  }
 }
