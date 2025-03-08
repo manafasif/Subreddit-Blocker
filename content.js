@@ -1,3 +1,18 @@
+// Listen for messages from the background script to trigger the subreddit check
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.action === "checkSubreddit") {
+    try {
+      blockSubreddit(); // Trigger the blocking function when the message is received
+      sendResponse({ success: true }); // Ensure to send a response back to the background
+    } catch (error) {
+      console.error("Error during subreddit blocking:", error);
+      sendResponse({ success: false, error: error.message });
+    }
+  }
+  // Keep the message port open to receive response asynchronously
+  return true;
+});
+
 // Function to extract subreddit name and block the page if necessary
 function blockSubreddit() {
   const url = new URL(window.location.href);
@@ -10,45 +25,56 @@ function blockSubreddit() {
 
   console.log(`Checking subreddit: ${subreddit}`);
 
-  // Get the list of user-blocked subreddits from storage
-  chrome.storage.local.get("userBlockedSubreddits", (data) => {
-    const userBlockedSubreddits = data.userBlockedSubreddits || [];
+  // Get both blocked subreddits lists (default blocked and user-blocked)
+  chrome.storage.local.get(
+    ["blockedSubreddits", "userBlockedSubreddits"],
+    (data) => {
+      const blockedSubreddits = data.blockedSubreddits || [];
+      const userBlockedSubreddits = data.userBlockedSubreddits || [];
 
-    // Log the user-blocked subreddits for debugging
-    console.log(
-      "User blocked subreddits loaded from storage:",
-      userBlockedSubreddits
-    );
-
-    // Check if the current subreddit is blocked
-    if (userBlockedSubreddits.includes(subreddit)) {
-      // If the subreddit is in the user-blocked list, replace the page content
+      // Log the blocked subreddits for debugging
+      console.log("Blocked subreddits loaded from storage:", blockedSubreddits);
       console.log(
-        `Subreddit "${subreddit}" is blocked. Replacing page content.`
+        "User-blocked subreddits loaded from storage:",
+        userBlockedSubreddits
       );
 
-      // Temporarily disconnect the observer to prevent an infinite loop
-      observer.disconnect();
+      // Combine both blocked subreddits lists
+      const combinedBlockedSubreddits = new Set([
+        ...blockedSubreddits,
+        ...userBlockedSubreddits,
+      ]);
 
-      // Clear existing content and append the block message
-      document.body.innerHTML = ""; // This will clear any existing content
-      const blockedMessage = document.createElement("div");
-      blockedMessage.style.textAlign = "center";
-      blockedMessage.style.marginTop = "50px";
+      // Check if the current subreddit is blocked
+      if (combinedBlockedSubreddits.has(subreddit)) {
+        // If the subreddit is in the combined blocked list, replace the page content
+        console.log(
+          `Subreddit "${subreddit}" is blocked. Replacing page content.`
+        );
 
-      const heading = document.createElement("h1");
-      heading.innerText = "Blocked Subreddit";
-      blockedMessage.appendChild(heading);
+        // Temporarily disconnect the observer to prevent an infinite loop
+        observer.disconnect();
 
-      const paragraph = document.createElement("p");
-      paragraph.innerHTML = `The subreddit <strong>${subreddit}</strong> has been blocked.`;
-      blockedMessage.appendChild(paragraph);
+        // Clear existing content and append the block message
+        document.body.innerHTML = ""; // This will clear any existing content
+        const blockedMessage = document.createElement("div");
+        blockedMessage.style.textAlign = "center";
+        blockedMessage.style.marginTop = "50px";
 
-      document.body.appendChild(blockedMessage);
-    } else {
-      console.log(`Subreddit "${subreddit}" is not blocked.`);
+        const heading = document.createElement("h1");
+        heading.innerText = "Blocked Subreddit";
+        blockedMessage.appendChild(heading);
+
+        const paragraph = document.createElement("p");
+        paragraph.innerHTML = `The subreddit <strong>${subreddit}</strong> has been blocked.`;
+        blockedMessage.appendChild(paragraph);
+
+        document.body.appendChild(blockedMessage);
+      } else {
+        console.log(`Subreddit "${subreddit}" is not blocked.`);
+      }
     }
-  });
+  );
 }
 
 // Observe changes to the DOM and trigger blocking when necessary

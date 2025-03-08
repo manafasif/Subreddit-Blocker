@@ -77,3 +77,11 @@ function sendMessageToContentScript(tabId, retries = 5) {
     }
   });
 }
+
+// chrome.runtime.onInstalled.addListener(() => {
+//   chrome.storage.local.get("userBlockedSubreddits", (data) => {
+//     if (!data.userBlockedSubreddits) {
+//       chrome.storage.local.set({ userBlockedSubreddits: [] });
+//     }
+//   });
+// });
