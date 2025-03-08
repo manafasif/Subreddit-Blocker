@@ -14,13 +14,12 @@
   },
   "content_scripts": [
     {
-      "matches": ["*://www.reddit.com/r/*"],
+      "matches": ["https:://www.reddit.com/r/*"],
       "js": ["content.js"]
     }
   ],
   "host_permissions": [
-    "http://*/*",
-    "https://*/*"
+    "https://www.reddit.com/*"
   ],
   "action": {
     "default_popup": "popup.html",
