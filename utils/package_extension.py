@@ -2,7 +2,7 @@ import os
 import zipfile
 
 # Configuration
-EXTENSION_NAME = "SubReddit_Blocker"
+EXTENSION_NAME = "Subreddit_Blocker"
 RELEASE_DIR = "releases"
 ZIP_FILE = os.path.join(RELEASE_DIR, f"{EXTENSION_NAME}.zip")
 
